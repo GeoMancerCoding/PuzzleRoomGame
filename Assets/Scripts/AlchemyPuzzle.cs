@@ -12,50 +12,56 @@ public class AlchemyPuzzle : MonoBehaviour
     public int targetBeakerTwo;
     public int targetBeakerThree;
     public int targetBeakerFour;
+    bool finishedPuzzle;
+    bool drawerHasBeenOpened;
     [Header("Don't Touch These")]
-    public float currentBeakerOne;
-    public float currentBeakerTwo;
-    public float currentBeakerThree;
-    public float currentBeakerFour;
-
-    private void Start()
-    {
-        beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
-        beakerTwo.transform.localScale = new Vector3(beakerTwo.transform.localScale.x, currentBeakerTwo / 10, beakerTwo.transform.localScale.z);
-        beakerThree.transform.localScale = new Vector3(beakerThree.transform.localScale.x, currentBeakerThree / 10, beakerThree.transform.localScale.z);
-        beakerFour.transform.localScale = new Vector3(beakerFour.transform.localScale.x, currentBeakerFour / 10, beakerFour.transform.localScale.z);
-        enabled = false;
-    }
-
+    [SerializeField] float currentBeakerOne;
+    [SerializeField] float currentBeakerTwo;
+    [SerializeField] float currentBeakerThree;
+    [SerializeField] float currentBeakerFour;
     private void Update()
     {
-        if (currentBeakerOne == targetBeakerOne && 
-            currentBeakerTwo == targetBeakerTwo &&
-            currentBeakerThree == targetBeakerThree &&
-            currentBeakerFour == targetBeakerFour)
+        if (finishedPuzzle == false)
         {
-            print("COMPLETE");
+            if (currentBeakerOne == targetBeakerOne &&
+                currentBeakerTwo == targetBeakerTwo &&
+                currentBeakerThree == targetBeakerThree &&
+                currentBeakerFour == targetBeakerFour)
+            {
+                finishedPuzzle = true;
+                print("COMPLETE");
+            }
+            beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
+            beakerTwo.transform.localScale = new Vector3(beakerTwo.transform.localScale.x, currentBeakerTwo / 10, beakerTwo.transform.localScale.z);
+            beakerThree.transform.localScale = new Vector3(beakerThree.transform.localScale.x, currentBeakerThree / 10, beakerThree.transform.localScale.z);
+            beakerFour.transform.localScale = new Vector3(beakerFour.transform.localScale.x, currentBeakerFour / 10, beakerFour.transform.localScale.z);
         }
-        beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
-        beakerTwo.transform.localScale = new Vector3(beakerTwo.transform.localScale.x, currentBeakerTwo / 10, beakerTwo.transform.localScale.z);
-        beakerThree.transform.localScale = new Vector3(beakerThree.transform.localScale.x, currentBeakerThree / 10, beakerThree.transform.localScale.z);
-        beakerFour.transform.localScale = new Vector3(beakerFour.transform.localScale.x, currentBeakerFour / 10, beakerFour.transform.localScale.z);
+        if (finishedPuzzle == true && drawerHasBeenOpened == false)
+        {
+            //things to do
+
+
+
+
+            //this is here so it doesnt constantly trigger every frame
+            drawerHasBeenOpened = true;
+        }
     }
     public void UP(int beakerNumber)
     {
         switch (beakerNumber)
         {
             case 1:
-                if (currentBeakerOne <= 9)currentBeakerOne += 1;
+                if (currentBeakerOne <= 8)currentBeakerOne += 1;
                 break;
             case 2:
-                if (currentBeakerTwo <= 9) currentBeakerTwo += 1;
+                if (currentBeakerTwo <= 8) currentBeakerTwo += 1;
                 break;
             case 3:
-                if (currentBeakerThree <= 9) currentBeakerThree += 1;
+                if (currentBeakerThree <= 8) currentBeakerThree += 1;
                 break;
             case 4:
-                if (currentBeakerFour <= 9) currentBeakerFour += 1;
+                if (currentBeakerFour <= 8) currentBeakerFour += 1;
                 break;
         }
     }
