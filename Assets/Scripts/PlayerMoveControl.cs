@@ -23,6 +23,7 @@ public class PlayerMoveControl : MonoBehaviour
     private bool canInteract = true;
     private Interactable nearbyInteractable;
     public Transform CameraT;
+    private Pickup nearbyPickup;
 
     void Start()
     {
@@ -74,11 +75,16 @@ public class PlayerMoveControl : MonoBehaviour
                 canLookAround = false;
                 canInteract = false;
                 interacting = true;
+                characterController.Move(Vector3.zero);
                 /*
                 _rigidbody.velocity = Vector3.zero;
                 _rigidbody.angularVelocity = Vector3.zero;
                 */
                 nearbyInteractable.LerpCamToPos(this);
+            }
+            else if (Input.GetKeyDown(KeyCode.E) && nearbyPickup != null && nearbyPickup.IsVisible(CameraT))
+            {
+                Debug.Log("Pick dat up!");
             }
             else if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)) && interacting)
             {
@@ -159,6 +165,16 @@ public class PlayerMoveControl : MonoBehaviour
     public void ClearNearbyInteractable()
     {
         nearbyInteractable = null;
+    }
+
+    public void SetNearbyPickup(Pickup pickup)
+    {
+        nearbyPickup = pickup;
+    }
+
+    public void ClearNearbyPickup()
+    {
+        nearbyPickup = null;
     }
 
     public void EnableCapsule()

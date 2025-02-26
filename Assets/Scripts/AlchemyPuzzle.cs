@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AlchemyPuzzle : MonoBehaviour
 {
+    public Animation Anim;
     public GameObject beakerOne;
     public GameObject beakerTwo;
     public GameObject beakerThree;
@@ -14,6 +15,8 @@ public class AlchemyPuzzle : MonoBehaviour
     public int targetBeakerFour;
     bool finishedPuzzle;
     bool drawerHasBeenOpened;
+    public Pickup Stethoscope;
+
     [Header("Don't Touch These")]
     [SerializeField] float currentBeakerOne;
     [SerializeField] float currentBeakerTwo;
@@ -39,7 +42,6 @@ public class AlchemyPuzzle : MonoBehaviour
                 currentBeakerFour == targetBeakerFour)
             {
                 finishedPuzzle = true;
-                print("COMPLETE");
             }
             beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
             beakerTwo.transform.localScale = new Vector3(beakerTwo.transform.localScale.x, currentBeakerTwo / 10, beakerTwo.transform.localScale.z);
@@ -48,12 +50,9 @@ public class AlchemyPuzzle : MonoBehaviour
         }
         if (finishedPuzzle == true && drawerHasBeenOpened == false)
         {
-            //things to do
-
-
-
-
-            //this is here so it doesnt constantly trigger every frame
+            Anim.Play("OpenSecretCompartment");
+            GetComponent<Interactable>().LerpCamToOrigPos(true);
+            enabled = false;
             drawerHasBeenOpened = true;
         }
     }
@@ -92,5 +91,10 @@ public class AlchemyPuzzle : MonoBehaviour
                 if (currentBeakerFour >= 1) currentBeakerFour -= 1;
                 break;
         }
+    }
+
+    public void OnFinishOpeningDrawer()
+    {
+        Stethoscope.Enable();
     }
 }
