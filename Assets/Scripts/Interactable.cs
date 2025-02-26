@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
     public Transform InteractableCamPosT;
     public Transform InteractableFocusPosT;
     public MonoBehaviour InteractableBehaviour;
-    private FirstPersonMovement player;
+    private PlayerMoveControl player;
 
     public float LerpDurationSecs = 1f;
 
@@ -27,7 +27,7 @@ public class Interactable : MonoBehaviour
         if (collider.gameObject.tag == playerTag)
         {
             Indicator.SetActive(true);
-            collider.gameObject.GetComponent<FirstPersonMovement>().SetNearbyInteractable(this);
+            collider.gameObject.GetComponent<PlayerMoveControl>().SetNearbyInteractable(this);
         }
     }
 
@@ -36,18 +36,18 @@ public class Interactable : MonoBehaviour
         if (collider.gameObject.tag == playerTag)
         {
             Indicator.SetActive(false);
-            collider.gameObject.GetComponent<FirstPersonMovement>().ClearNearbyInteractable();
+            collider.gameObject.GetComponent<PlayerMoveControl>().ClearNearbyInteractable();
         }
     }
 
-    public void LerpCamToPos(FirstPersonMovement _player)
+    public void LerpCamToPos(PlayerMoveControl _player)
     {
         player = _player;
         Indicator.SetActive(false);
         StartCoroutine(LerpCamToPosCoroutine(player));
     }
 
-    private IEnumerator LerpCamToPosCoroutine(FirstPersonMovement player)
+    private IEnumerator LerpCamToPosCoroutine(PlayerMoveControl player)
     {
         origCamPos = player.CameraT.position;
         origCamRot = player.CameraT.rotation;
@@ -92,6 +92,7 @@ public class Interactable : MonoBehaviour
         player.EnableInteraction();
         player.EnableMovement();
         player.EnableLook();
+        player.EnableCapsule();
         if (DestroyOnFinish)
         {
             Indicator.SetActive(false);

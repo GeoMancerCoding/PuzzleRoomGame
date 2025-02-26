@@ -18,6 +18,12 @@ public class PlayerMoveControl : MonoBehaviour
     public Transform cameraPoint;
     InteractableVariables InterVaris;
     bool inInteractArea;
+
+    private bool interacting = false;
+    private bool canInteract = true;
+    private Interactable nearbyInteractable;
+    public Transform CameraT;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -59,6 +65,28 @@ public class PlayerMoveControl : MonoBehaviour
         {
             Application.Quit();
         }
+        if (canInteract)
+        {
+            if (Input.GetKeyDown(KeyCode.E) && nearbyInteractable != null && nearbyInteractable.IsVisible(CameraT) && !interacting)
+            {
+                playerCapsule.SetActive(false);
+                canMove = false;
+                canLookAround = false;
+                canInteract = false;
+                interacting = true;
+                /*
+                _rigidbody.velocity = Vector3.zero;
+                _rigidbody.angularVelocity = Vector3.zero;
+                */
+                nearbyInteractable.LerpCamToPos(this);
+            }
+            else if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)) && interacting)
+            {
+                canInteract = false;
+                nearbyInteractable.LerpCamToOrigPos();
+            }
+        }
+        /*
         if (Input.GetKeyDown(KeyCode.E) && (inInteractArea || canLookAround == false))
         {
             if (canLookAround == true)
@@ -81,7 +109,10 @@ public class PlayerMoveControl : MonoBehaviour
                 Cursor.visible = false;
             }
         }
+        */
     }
+
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "PuzzleInteractable")
@@ -97,5 +128,41 @@ public class PlayerMoveControl : MonoBehaviour
             inInteractArea = false;
             InterVaris = null;
         }
+    }
+    */
+
+    public void EnableMovement()
+    {
+        canMove = true;
+    }
+
+    public void EnableInteraction()
+    {
+        canInteract = true;
+    }
+
+    public void EnableLook()
+    {
+        canLookAround = true;
+    }
+
+    public void StopInteracting()
+    {
+        interacting = false;
+    }
+
+    public void SetNearbyInteractable(Interactable interactable)
+    {
+        nearbyInteractable = interactable;
+    }
+
+    public void ClearNearbyInteractable()
+    {
+        nearbyInteractable = null;
+    }
+
+    public void EnableCapsule()
+    {
+        playerCapsule.SetActive(true);
     }
 }

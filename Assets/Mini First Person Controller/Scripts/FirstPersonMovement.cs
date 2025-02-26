@@ -21,7 +21,7 @@ public class FirstPersonMovement : MonoBehaviour
                 interacting = true;
                 _rigidbody.velocity = Vector3.zero;
                 _rigidbody.angularVelocity = Vector3.zero;
-                nearbyInteractable.LerpCamToPos(this);
+                //nearbyInteractable.LerpCamToPos(this);
             }
             else if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)) && interacting)
             {

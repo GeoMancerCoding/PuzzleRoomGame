@@ -17,6 +17,16 @@ public class AlchemyPuzzle : MonoBehaviour
     public float currentBeakerTwo;
     public float currentBeakerThree;
     public float currentBeakerFour;
+
+    private void Start()
+    {
+        beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
+        beakerTwo.transform.localScale = new Vector3(beakerTwo.transform.localScale.x, currentBeakerTwo / 10, beakerTwo.transform.localScale.z);
+        beakerThree.transform.localScale = new Vector3(beakerThree.transform.localScale.x, currentBeakerThree / 10, beakerThree.transform.localScale.z);
+        beakerFour.transform.localScale = new Vector3(beakerFour.transform.localScale.x, currentBeakerFour / 10, beakerFour.transform.localScale.z);
+        enabled = false;
+    }
+
     private void Update()
     {
         if (currentBeakerOne == targetBeakerOne && 
