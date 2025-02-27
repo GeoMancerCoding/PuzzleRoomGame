@@ -14,6 +14,7 @@ public class Desk : MonoBehaviour
 
     private Ray ray;
     private RaycastHit hit;
+    private bool pressingButton = false;
     private bool openingDrawer = false;
     private Collider lastDrawerCollider = null;
 
@@ -28,6 +29,7 @@ public class Desk : MonoBehaviour
     public Transform TwoSnakesPuzzlePieceHoldingSlot;
     public float PutPuzzlePieceOnTableDurationSecs = 1f;
     private bool draggingPuzzlePiece = false;
+    private Collider lastHoveredSolutionSlotCollider = null;
 
     public List<string> CorrectSequence;
     private List<string> enteredSequence = new List<string>();

@@ -13,6 +13,7 @@ public class LightningPuzzle : MonoBehaviour
     public int designatedGreenNumber;
     public int designatedYellowNumber;
     public float lightningStrikeInbetweenTimer;
+    [Header("Dont Touch These VVV")]
     [SerializeField] int lightningLvl;
     [SerializeField] float timer;
     [SerializeField] float maxTimer;
