@@ -33,6 +33,7 @@ public class PlayerMoveControl : MonoBehaviour
     public float LerpObjectToInventoryDurationSecs = 1f;
     public GameObject FocusCamera;
     private Quaternion origLookRotBeforeInspection;
+    public GameObject InspectionUICanvas;
 
     public bool CarryingOneSnakePiece = false;
     public bool CarryingTwoSnakesPiece = false;
@@ -145,6 +146,7 @@ public class PlayerMoveControl : MonoBehaviour
 
     private IEnumerator InspectObject()
     {
+        InspectionUICanvas.SetActive(true);
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
@@ -168,6 +170,7 @@ public class PlayerMoveControl : MonoBehaviour
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Default");
         }
+        InspectionUICanvas.SetActive(false);
         if (nearbyPickup.PuzzleImage != null)
         {
             nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Default");
