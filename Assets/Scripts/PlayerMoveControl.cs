@@ -38,6 +38,13 @@ public class PlayerMoveControl : MonoBehaviour
     public bool CarryingTwoSnakesPiece = false;
     public bool CarryingHeartPiece = false;
 
+
+    public GameObject puzzleUI1;
+    public GameObject puzzleUI3;
+    public GameObject puzzleUI2;
+    public GameObject Stephescope;
+
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -45,6 +52,11 @@ public class PlayerMoveControl : MonoBehaviour
         Cursor.visible = false;
         transform.localScale = new Vector3(scale, scale, scale);
         canLookAround = true;
+
+        puzzleUI1.SetActive(false);
+        puzzleUI2.SetActive(false);
+        puzzleUI3.SetActive(false);
+        Stephescope.SetActive(false);
     }
 
     void Update()
@@ -204,14 +216,17 @@ public class PlayerMoveControl : MonoBehaviour
             if (nearbyPickup.gameObject.name == "HeartPuzzlePiece")
             {
                 CarryingHeartPiece = true;
+                puzzleUI2.SetActive(true);
             }
             else if (nearbyPickup.gameObject.name == "OneSnakePuzzlePiece")
             {
                 CarryingOneSnakePiece = true;
+                puzzleUI3.SetActive(true);
             }
             else if (nearbyPickup.gameObject.name == "TwoSnakesPuzzlePiece")
             {
                 CarryingTwoSnakesPiece = true;
+                puzzleUI1.SetActive(true);
             }
             Destroy(nearbyPickup.gameObject);
         }

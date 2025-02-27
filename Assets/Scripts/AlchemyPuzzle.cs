@@ -33,6 +33,8 @@ public class AlchemyPuzzle : MonoBehaviour
     [SerializeField] float currentBeakerThree;
     [SerializeField] float currentBeakerFour;
 
+    public PlayerMoveControl mover;
+
     private void Start()
     {
         beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
@@ -107,7 +109,12 @@ public class AlchemyPuzzle : MonoBehaviour
     public void OnFinishOpeningDrawer()
     {
         Stethoscope.Enable();
+<<<<<<< Updated upstream
         whisper.Play();
+=======
+        mover.Stephescope.SetActive(true);
+
+>>>>>>> Stashed changes
     }
 
     public void playSpill()

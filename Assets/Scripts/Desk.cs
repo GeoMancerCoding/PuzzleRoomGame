@@ -35,6 +35,9 @@ public class Desk : MonoBehaviour
     private List<string> enteredSequence = new List<string>();
     public Pickup PillBottle;
 
+
+    public PlayerMoveControl mover;
+
     private void OnEnable()
     {
         PlayerMoveControl player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMoveControl>();
@@ -42,16 +45,19 @@ public class Desk : MonoBehaviour
         {
             SpawnAndPlacePuzzlePiece(HeartPuzzlePiecePrefab, player.InventoryPointT, HeartPuzzlePieceHoldingSlot);
             player.CarryingHeartPiece = false;
+            mover.puzzleUI2.SetActive(false);
         }
         if (player.CarryingOneSnakePiece == true)
         {
             SpawnAndPlacePuzzlePiece(OneSnakePuzzlePiecePrefab, player.InventoryPointT, OneSnakePieceHoldingSlot);
             player.CarryingOneSnakePiece = false;
+            mover.puzzleUI3.SetActive(false);
         }
         if (player.CarryingTwoSnakesPiece == true)
         {
             SpawnAndPlacePuzzlePiece(TwoSnakesPuzzlePiecePrefab, player.InventoryPointT, TwoSnakesPuzzlePieceHoldingSlot);
             player.CarryingTwoSnakesPiece = false;
+            mover.puzzleUI1.SetActive(false);
         }
     }
 

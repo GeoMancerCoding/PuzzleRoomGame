@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class UIScript : MonoBehaviour
 {
-    public GameObject PuzzleUI1;
-    public GameObject PuzzleUI2;
-    public GameObject PuzzleUI3;
-    public GameObject Stepeschope;
 
 
     public TextMeshProUGUI TimerText;
@@ -16,6 +12,10 @@ public class UIScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     }
 
     // Update is called once per frame
