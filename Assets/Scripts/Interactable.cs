@@ -6,8 +6,9 @@ public class Interactable : MonoBehaviour
 {
     public GameObject Indicator;
     public Transform InteractableCamPosT;
-    public Transform InteractableFocusPosT;
     public MonoBehaviour InteractableBehaviour;
+    public float LookAtInterestingThingDurationSecs = 3f;
+    public float LingerLookingAtInterestingThingSecs = 2f;
     private PlayerMoveControl player;
 
     public float LerpDurationSecs = 1f;
@@ -15,6 +16,8 @@ public class Interactable : MonoBehaviour
     private string playerTag = "Player";
     private Vector3 origCamPos;
     private Quaternion origCamRot;
+
+    public bool CanBeInteractedWith = true;
 
     public bool IsVisible(Transform cameraT)
     {
@@ -24,7 +27,7 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == playerTag)
+        if (CanBeInteractedWith && collider.gameObject.tag == playerTag)
         {
             Indicator.SetActive(true);
             collider.gameObject.GetComponent<PlayerMoveControl>().SetNearbyInteractable(this);
@@ -33,7 +36,7 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.gameObject.tag == playerTag)
+        if (CanBeInteractedWith && collider.gameObject.tag == playerTag)
         {
             Indicator.SetActive(false);
             collider.gameObject.GetComponent<PlayerMoveControl>().ClearNearbyInteractable();
@@ -102,6 +105,43 @@ public class Interactable : MonoBehaviour
         {
             Indicator.SetActive(true);
         }
+        yield return null;
+    }
+
+
+    public void LookAtPointOfInterest(Transform interestingT, bool DestroyOnFinish = false)
+    {
+        StartCoroutine(LookAtPointOfInterestCoroutine(interestingT, DestroyOnFinish));
+    }
+
+    private Vector3 relativePos;
+    private Quaternion toRotation;
+    private IEnumerator LookAtPointOfInterestCoroutine(Transform interestingT, bool DestroyOnFinish = false)
+    {
+        float elapsedTime = 0f;
+        relativePos = interestingT.position - player.CameraT.position;
+        toRotation = Quaternion.LookRotation(relativePos);
+        Quaternion origRot = player.CameraT.rotation;
+        while (elapsedTime < LookAtInterestingThingDurationSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            player.CameraT.rotation = Quaternion.Lerp(origRot, toRotation, elapsedTime / LookAtInterestingThingDurationSecs);
+            yield return null;
+        }
+        elapsedTime = 0f;
+        while (elapsedTime < LingerLookingAtInterestingThingSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            yield return null;
+        }
+        elapsedTime = 0f;
+        while (elapsedTime < LookAtInterestingThingDurationSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            player.CameraT.rotation = Quaternion.Lerp(toRotation, origRot, elapsedTime / LookAtInterestingThingDurationSecs);
+            yield return null;
+        }
+        StartCoroutine(LerpCamToOrigPosCoroutine(DestroyOnFinish));
         yield return null;
     }
 }
