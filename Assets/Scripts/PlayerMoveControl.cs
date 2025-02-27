@@ -107,7 +107,6 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
-            Debug.Log("Pick it up!");
             inspecting = true;
             nearbyPickup.HideIndicator();
             canMove = false;
@@ -165,7 +164,15 @@ public class PlayerMoveControl : MonoBehaviour
                     0) * Time.fixedDeltaTime * InspectionRotationSpeed);
             yield return null;
         }
-        nearbyPickup.gameObject.layer = 0;
+        foreach (Renderer renderer in nearbyPickup.Renderers)
+        {
+            renderer.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+        if (nearbyPickup.PuzzleImage != null)
+        {
+            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Default");
+            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
         FocusCamera.SetActive(false);
         StartCoroutine(LerpObjectToInventory());
         yield return null;
