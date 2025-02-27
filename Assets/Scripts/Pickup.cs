@@ -3,6 +3,8 @@ using UnityEngine;
 public class Pickup : MonoBehaviour
 {
     public bool CanBePickedUp = true;
+    public bool ToBeInspected = true;
+
     public GameObject Indicator;
     public BoxCollider boxCollider;
     private string playerTag = "Player";
@@ -34,7 +36,12 @@ public class Pickup : MonoBehaviour
     public void Enable()
     {
         CanBePickedUp = true;
-        Indicator.SetActive(true);
+        //Indicator.SetActive(true);
         GetComponent<Collider>().enabled = true;
+    }
+
+    public void HideIndicator()
+    {
+        Indicator.SetActive(false);
     }
 }
