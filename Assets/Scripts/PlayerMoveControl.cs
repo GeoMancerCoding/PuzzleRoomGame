@@ -32,6 +32,7 @@ public class PlayerMoveControl : MonoBehaviour
     public float InspectionRotationSpeed = 2f;
     public float LerpObjectToInventoryDurationSecs = 1f;
     public GameObject FocusCamera;
+    private Quaternion origLookRotBeforeInspection;
 
     void Start()
     {
@@ -113,6 +114,7 @@ public class PlayerMoveControl : MonoBehaviour
 
     private IEnumerator LerpObjectToInspectPoint()
     {
+        origLookRotBeforeInspection = CameraT.transform.rotation;
         Vector3 origPos = nearbyPickup.transform.position;
         Quaternion origRot = nearbyPickup.transform.rotation;
         float elapsedTime = 0f;
@@ -154,15 +156,18 @@ public class PlayerMoveControl : MonoBehaviour
     {
         Vector3 origPos = nearbyPickup.transform.position;
         Quaternion origRot = nearbyPickup.transform.rotation;
+        Quaternion lookRot = CameraT.transform.rotation;
         float elapsedTime = 0f;
         while (elapsedTime < LerpObjectToInventoryDurationSecs)
         {
             elapsedTime += Time.fixedDeltaTime;
             nearbyPickup.transform.position = Vector3.Lerp(origPos, InventoryPointT.position, elapsedTime / LerpObjectToInventoryDurationSecs);
             nearbyPickup.transform.rotation = Quaternion.Lerp(origRot, InventoryPointT.rotation, elapsedTime / LerpObjectToInventoryDurationSecs);
+            CameraT.transform.rotation = Quaternion.Lerp(lookRot, origLookRotBeforeInspection, elapsedTime / LerpObjectToInventoryDurationSecs);
             yield return null;
         }
         Destroy(nearbyPickup.gameObject);
+        CameraT.transform.rotation = origLookRotBeforeInspection;
         canMove = true;
         canLookAround = true;
         canInteract = true;
