@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AlchemyPuzzle : MonoBehaviour
@@ -16,6 +18,14 @@ public class AlchemyPuzzle : MonoBehaviour
     bool finishedPuzzle;
     bool drawerHasBeenOpened;
     public Pickup Stethoscope;
+
+    public AudioSource drawer;
+
+    public AudioSource chemical;
+    public float cooldownTime = 2f;
+    private bool inCooldown;
+
+    public AudioSource whisper;
 
     [Header("Don't Touch These")]
     [SerializeField] float currentBeakerOne;
@@ -51,6 +61,7 @@ public class AlchemyPuzzle : MonoBehaviour
         if (finishedPuzzle == true && drawerHasBeenOpened == false)
         {
             Anim.Play("OpenSecretCompartment");
+            drawer.Play();
             GetComponent<Interactable>().LerpCamToOrigPos(true);
             enabled = false;
             drawerHasBeenOpened = true;
@@ -96,5 +107,24 @@ public class AlchemyPuzzle : MonoBehaviour
     public void OnFinishOpeningDrawer()
     {
         Stethoscope.Enable();
+        whisper.Play();
     }
+
+    public void playSpill()
+    {
+        if (inCooldown == false)
+        {
+            chemical.Play();
+            StartCoroutine("WaitforSound");
+        }
+        }
+
+        IEnumerator WaitforSound()
+    {
+        // suspend execution for 5 seconds
+        inCooldown = true;
+        yield return new WaitForSeconds(cooldownTime);
+        inCooldown = false;
+    }
+
 }

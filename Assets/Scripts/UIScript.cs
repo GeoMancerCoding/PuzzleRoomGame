@@ -16,10 +16,6 @@ public class UIScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PuzzleUI1.SetActive(false);
-        PuzzleUI2.SetActive(false);
-        PuzzleUI3.SetActive(false);
-        Stepeschope.SetActive(false);
     }
 
     // Update is called once per frame
