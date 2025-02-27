@@ -1,11 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Pickup : MonoBehaviour
 {
     public bool CanBePickedUp = true;
+    public bool ToBeInspected = true;
+    public float InspectZDistance = 0.5f;
     public GameObject Indicator;
     public BoxCollider boxCollider;
     private string playerTag = "Player";
+    public Renderer[] Renderers;
+    public RawImage PuzzleImage;
 
     private void OnTriggerEnter(Collider collider)
     {
@@ -34,7 +39,12 @@ public class Pickup : MonoBehaviour
     public void Enable()
     {
         CanBePickedUp = true;
-        Indicator.SetActive(true);
+        //Indicator.SetActive(true);
         GetComponent<Collider>().enabled = true;
+    }
+
+    public void HideIndicator()
+    {
+        Indicator.SetActive(false);
     }
 }

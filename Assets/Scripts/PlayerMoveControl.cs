@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerMoveControl : MonoBehaviour
 {
@@ -21,9 +22,21 @@ public class PlayerMoveControl : MonoBehaviour
 
     private bool interacting = false;
     private bool canInteract = true;
+    private bool inspecting = false;
     private Interactable nearbyInteractable;
     public Transform CameraT;
     private Pickup nearbyPickup;
+    public Transform InspectPointT;
+    public Transform InventoryPointT;
+    public float LerpObjectToInspectPointDurationSecs = 1f;
+    public float InspectionRotationSpeed = 2f;
+    public float LerpObjectToInventoryDurationSecs = 1f;
+    public GameObject FocusCamera;
+    private Quaternion origLookRotBeforeInspection;
+
+    public bool CarryingOneSnakePiece = false;
+    public bool CarryingTwoSnakesPiece = false;
+    public bool CarryingHeartPiece = false;
 
     void Start()
     {
@@ -76,67 +89,133 @@ public class PlayerMoveControl : MonoBehaviour
                 canInteract = false;
                 interacting = true;
                 characterController.Move(Vector3.zero);
-                /*
-                _rigidbody.velocity = Vector3.zero;
-                _rigidbody.angularVelocity = Vector3.zero;
-                */
                 nearbyInteractable.LerpCamToPos(this);
             }
-            else if (Input.GetKeyDown(KeyCode.E) && nearbyPickup != null && nearbyPickup.IsVisible(CameraT))
+            else if (Input.GetKeyDown(KeyCode.E) && nearbyPickup != null && nearbyPickup.IsVisible(CameraT) && !inspecting)
             {
-                Debug.Log("Pick dat up!");
+                PickUpObject();
             }
-            else if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)) && interacting)
+            else if ((Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)) && interacting && !inspecting)
             {
                 canInteract = false;
                 nearbyInteractable.LerpCamToOrigPos();
             }
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.E) && (inInteractArea || canLookAround == false))
+    }
+
+    public void PickUpObject()
+    {
+        if (nearbyPickup.ToBeInspected == true)
         {
-            if (canLookAround == true)
+            Debug.Log("Pick it up!");
+            inspecting = true;
+            nearbyPickup.HideIndicator();
+            canMove = false;
+            canLookAround = false;
+            canInteract = false;
+            StartCoroutine(LerpObjectToInspectPoint());
+            nearbyPickup.enabled = false;
+        }
+    }
+
+    private IEnumerator LerpObjectToInspectPoint()
+    {
+        origLookRotBeforeInspection = CameraT.transform.rotation;
+        InspectPointT.localPosition = new Vector3(
+            InspectPointT.localPosition.x,
+            InspectPointT.localPosition.y,
+            nearbyPickup.InspectZDistance);
+        Vector3 origPos = nearbyPickup.transform.position;
+        Quaternion origRot = nearbyPickup.transform.rotation;
+        float elapsedTime = 0f;
+        while (elapsedTime < LerpObjectToInspectPointDurationSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            nearbyPickup.transform.position = Vector3.Lerp(origPos, InspectPointT.position, elapsedTime / LerpObjectToInspectPointDurationSecs);
+            nearbyPickup.transform.rotation = Quaternion.Lerp(origRot, InspectPointT.rotation, elapsedTime / LerpObjectToInspectPointDurationSecs);
+            CameraT.LookAt(nearbyPickup.transform.position);
+            yield return null;
+        }
+        nearbyPickup.HideIndicator();
+        nearbyPickup.transform.position = InspectPointT.position;
+        nearbyPickup.transform.rotation = InspectPointT.rotation;
+        CameraT.LookAt(InspectPointT.position);
+        StartCoroutine(InspectObject());
+        yield return null;
+    }
+
+    private IEnumerator InspectObject()
+    {
+        foreach (Renderer renderer in nearbyPickup.Renderers)
+        {
+            renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
+        }
+        if (nearbyPickup.PuzzleImage != null)
+        {
+            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Focused");
+            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Focused");
+        }
+        FocusCamera.SetActive(true);
+        while (!Input.GetKeyDown(KeyCode.E))
+        {
+            nearbyPickup.transform.Rotate(
+                new Vector3(
+                    Input.GetAxis("Mouse Y"),
+                    -Input.GetAxis("Mouse X"),
+                    0) * Time.fixedDeltaTime * InspectionRotationSpeed);
+            yield return null;
+        }
+        nearbyPickup.gameObject.layer = 0;
+        FocusCamera.SetActive(false);
+        StartCoroutine(LerpObjectToInventory());
+        yield return null;
+    }
+
+    private IEnumerator LerpObjectToInventory()
+    {
+        Vector3 origPos = nearbyPickup.transform.position;
+        Quaternion origRot = nearbyPickup.transform.rotation;
+        Quaternion lookRot = CameraT.transform.rotation;
+        float elapsedTime = 0f;
+        while (elapsedTime < LerpObjectToInventoryDurationSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            if (nearbyPickup == null)
             {
-                canLookAround = false;
-                canMove = false;
-                playerCamera.transform.position = InterVaris.CameraPoint.position;
-                playerCamera.transform.rotation = InterVaris.CameraPoint.rotation;
-                playerCapsule.SetActive(false);
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
+                break;
             }
             else
             {
-                canMove = true;
-                canLookAround = true;
-                playerCapsule.SetActive(true);
-                playerCamera.transform.position = cameraPoint.position;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                nearbyPickup.transform.position = Vector3.Lerp(origPos, InventoryPointT.position, elapsedTime / LerpObjectToInventoryDurationSecs);
+                nearbyPickup.transform.rotation = Quaternion.Lerp(origRot, InventoryPointT.rotation, elapsedTime / LerpObjectToInventoryDurationSecs);
+                CameraT.transform.rotation = Quaternion.Lerp(lookRot, origLookRotBeforeInspection, elapsedTime / LerpObjectToInventoryDurationSecs);
             }
+            yield return null;
         }
-        */
-    }
-
-    /*
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "PuzzleInteractable")
+        if (nearbyPickup != null)
         {
-            inInteractArea = true;
-            InterVaris = other.GetComponent<InteractableVariables>();
+            if (nearbyPickup.gameObject.name == "HeartPuzzlePiece")
+            {
+                CarryingHeartPiece = true;
+            }
+            else if (nearbyPickup.gameObject.name == "OneSnakePuzzlePiece")
+            {
+                CarryingOneSnakePiece = true;
+            }
+            else if (nearbyPickup.gameObject.name == "TwoSnakesPuzzlePiece")
+            {
+                CarryingTwoSnakesPiece = true;
+            }
+            Destroy(nearbyPickup.gameObject);
         }
+        CameraT.transform.rotation = origLookRotBeforeInspection;
+        canMove = true;
+        canLookAround = true;
+        canInteract = true;
+        inspecting = false;
+        yield return null;
     }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "PuzzleInteractable")
-        {
-            inInteractArea = false;
-            InterVaris = null;
-        }
-    }
-    */
-
+    
     public void EnableMovement()
     {
         canMove = true;
