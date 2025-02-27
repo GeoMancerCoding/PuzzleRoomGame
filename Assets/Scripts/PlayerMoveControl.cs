@@ -33,6 +33,8 @@ public class PlayerMoveControl : MonoBehaviour
     public float LerpObjectToInventoryDurationSecs = 1f;
     public GameObject FocusCamera;
     private Quaternion origLookRotBeforeInspection;
+    public GameObject InspectionUICanvas;
+    public PlayerVO PlayerVO;
 
     public bool CarryingOneSnakePiece = false;
     public bool CarryingTwoSnakesPiece = false;
@@ -107,7 +109,6 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
-            Debug.Log("Pick it up!");
             inspecting = true;
             nearbyPickup.HideIndicator();
             canMove = false;
@@ -146,6 +147,30 @@ public class PlayerMoveControl : MonoBehaviour
 
     private IEnumerator InspectObject()
     {
+        switch (nearbyPickup.gameObject.name)
+        {
+            case "Sethascope":
+                PlayerVO.PlayStethoscopeVO();
+                break;
+            case "HeartPuzzlePiece":
+                PlayerVO.PlayerHeartPuzzlePieceVO();
+                break;
+            case "OneSnakePuzzlePiece":
+                PlayerVO.PlayOneSnakePuzzlePieceVO();
+                break;
+            case "TwoSnakesPuzzlePiece":
+                PlayerVO.PlayTwoSnakesPuzzlePieceVO();
+                break;
+            case "RoundPills":
+                PlayerVO.PlayPillBottleVO();
+                break;
+            case "Key":
+                PlayerVO.PlayKeyVO();
+                break;
+            default:
+                break;
+        }
+        InspectionUICanvas.SetActive(true);
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
@@ -165,7 +190,16 @@ public class PlayerMoveControl : MonoBehaviour
                     0) * Time.fixedDeltaTime * InspectionRotationSpeed);
             yield return null;
         }
-        nearbyPickup.gameObject.layer = 0;
+        InspectionUICanvas.SetActive(false);
+        foreach (Renderer renderer in nearbyPickup.Renderers)
+        {
+            renderer.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
+        if (nearbyPickup.PuzzleImage != null)
+        {
+            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Default");
+            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Default");
+        }
         FocusCamera.SetActive(false);
         StartCoroutine(LerpObjectToInventory());
         yield return null;

@@ -9,6 +9,7 @@ public class Safe : MonoBehaviour
     public Material DefaultMat;
     public Material HighlightMat;
     public Material PressedMat;
+    public Pickup Key;
 
     private Ray ray;
     private RaycastHit hit;
@@ -79,5 +80,6 @@ public class Safe : MonoBehaviour
         Anim.Play("Open");
         GetComponent<Interactable>().LerpCamToOrigPos(true);
         enabled = false;
+        Key.Enable();
     }
 }
