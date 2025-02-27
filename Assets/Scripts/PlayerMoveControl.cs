@@ -33,7 +33,6 @@ public class PlayerMoveControl : MonoBehaviour
     public float LerpObjectToInventoryDurationSecs = 1f;
     public GameObject FocusCamera;
     private Quaternion origLookRotBeforeInspection;
-    public GameObject InspectionUICanvas;
 
     public bool CarryingOneSnakePiece = false;
     public bool CarryingTwoSnakesPiece = false;
@@ -108,6 +107,7 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
+            Debug.Log("Pick it up!");
             inspecting = true;
             nearbyPickup.HideIndicator();
             canMove = false;
@@ -146,7 +146,6 @@ public class PlayerMoveControl : MonoBehaviour
 
     private IEnumerator InspectObject()
     {
-        InspectionUICanvas.SetActive(true);
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
@@ -166,16 +165,7 @@ public class PlayerMoveControl : MonoBehaviour
                     0) * Time.fixedDeltaTime * InspectionRotationSpeed);
             yield return null;
         }
-        foreach (Renderer renderer in nearbyPickup.Renderers)
-        {
-            renderer.gameObject.layer = LayerMask.NameToLayer("Default");
-        }
-        InspectionUICanvas.SetActive(false);
-        if (nearbyPickup.PuzzleImage != null)
-        {
-            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Default");
-            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Default");
-        }
+        nearbyPickup.gameObject.layer = 0;
         FocusCamera.SetActive(false);
         StartCoroutine(LerpObjectToInventory());
         yield return null;
