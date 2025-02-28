@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Linq.Expressions;
 
 public class PlayerMoveControl : MonoBehaviour
 {
@@ -35,6 +36,11 @@ public class PlayerMoveControl : MonoBehaviour
     private Quaternion origLookRotBeforeInspection;
     public GameObject InspectionUICanvas;
     public PlayerVO PlayerVO;
+
+    public AudioSource walk;
+    public float cooldownTime = 2f;
+
+    private bool inCooldown;
 
     public bool CarryingOneSnakePiece = false;
     public bool CarryingTwoSnakesPiece = false;
@@ -75,6 +81,42 @@ public class PlayerMoveControl : MonoBehaviour
                 rotationX = Mathf.Clamp(rotationX, -lookXLimit, lookXLimit);
                 playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
                 transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+            }
+            if (Input.GetKey(KeyCode.W))
+            {
+                if (!inCooldown)
+                {
+                    walk.Play();
+                    StartCoroutine("walkDelay");
+                }
+
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                if (!inCooldown)
+                {
+                    walk.Play();
+                    StartCoroutine("walkDelay");
+                }
+
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                if (!inCooldown)
+                {
+                    walk.Play();
+                    StartCoroutine("walkDelay");
+                }
+
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                if (!inCooldown)
+                {
+                    walk.Play();
+                    StartCoroutine("walkDelay");
+                }
+
             }
         }
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -293,5 +335,12 @@ public class PlayerMoveControl : MonoBehaviour
     public void EnableCapsule()
     {
         playerCapsule.SetActive(true);
+    }
+
+    IEnumerator walkDelay()
+    {
+        inCooldown = true;
+        yield return new WaitForSeconds(cooldownTime);
+        inCooldown = false;
     }
 }
