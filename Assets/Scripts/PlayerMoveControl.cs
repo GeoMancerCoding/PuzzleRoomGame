@@ -45,6 +45,7 @@ public class PlayerMoveControl : MonoBehaviour
     public bool CarryingOneSnakePiece = false;
     public bool CarryingTwoSnakesPiece = false;
     public bool CarryingHeartPiece = false;
+    public bool CarryingKey = false;
 
     void Start()
     {
@@ -151,6 +152,7 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
+            nearbyPickup.CanBePickedUp = false;
             inspecting = true;
             nearbyPickup.HideIndicator();
             canMove = false;
@@ -281,6 +283,10 @@ public class PlayerMoveControl : MonoBehaviour
             else if (nearbyPickup.gameObject.name == "TwoSnakesPuzzlePiece")
             {
                 CarryingTwoSnakesPiece = true;
+            }
+            else if (nearbyPickup.gameObject.name == "Key")
+            {
+                CarryingKey = true;
             }
             Destroy(nearbyPickup.gameObject);
         }
