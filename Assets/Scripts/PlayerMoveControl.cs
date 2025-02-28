@@ -35,6 +35,7 @@ public class PlayerMoveControl : MonoBehaviour
     public GameObject FocusCamera;
     private Quaternion origLookRotBeforeInspection;
     public GameObject InspectionUICanvas;
+    public UIScript uiScript;
     public PlayerVO PlayerVO;
 
     public AudioSource walk;
@@ -151,6 +152,7 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
+            nearbyPickup.CanBePickedUp = false;
             inspecting = true;
             nearbyPickup.HideIndicator();
             canMove = false;
@@ -273,14 +275,17 @@ public class PlayerMoveControl : MonoBehaviour
             if (nearbyPickup.gameObject.name == "HeartPuzzlePiece")
             {
                 CarryingHeartPiece = true;
+                uiScript.HeartPiece.SetActive(true);
             }
             else if (nearbyPickup.gameObject.name == "OneSnakePuzzlePiece")
             {
                 CarryingOneSnakePiece = true;
+                uiScript.OneSnakePiece.SetActive(true);
             }
             else if (nearbyPickup.gameObject.name == "TwoSnakesPuzzlePiece")
             {
                 CarryingTwoSnakesPiece = true;
+                uiScript.TwoSnakePiece.SetActive(true);
             }
             Destroy(nearbyPickup.gameObject);
         }

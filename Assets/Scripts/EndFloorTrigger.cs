@@ -9,7 +9,9 @@ public class EndFloorTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player")) 
         {
-            SceneManager.LoadScene(2); 
+            SceneManager.LoadScene(2);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
     }
 }

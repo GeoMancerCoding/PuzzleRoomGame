@@ -16,6 +16,7 @@ public class AlchemyPuzzle : MonoBehaviour
     bool finishedPuzzle;
     bool drawerHasBeenOpened;
     public Pickup Stethoscope;
+    public UIScript sethaUi;
 
     [Header("Don't Touch These")]
     [SerializeField] float currentBeakerOne;
@@ -102,6 +103,7 @@ public class AlchemyPuzzle : MonoBehaviour
 
     public void OnFinishOpeningDrawer()
     {
+        sethaUi.enabled = true;
         Stethoscope.Enable();
         whisper.Play();
     }
