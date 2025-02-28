@@ -1023,11 +1023,11 @@ Light:
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
-  m_Color: {r: 0.9622642, g: 0.8611841, b: 0.15795653, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1000
   m_Range: 100
-  m_SpotAngle: 45.49367
-  m_InnerSpotAngle: 37.295746
+  m_SpotAngle: 179
+  m_InnerSpotAngle: 81.52205
   m_CookieSize: 10
   m_Shadows:
     m_Type: 1
@@ -1067,7 +1067,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 10
-  m_ColorTemperature: 7903
+  m_ColorTemperature: 14704
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -1083,7 +1083,7 @@ Transform:
   m_GameObject: {fileID: 1388059928}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.04, y: 7.04, z: 4.84}
+  m_LocalPosition: {x: 0.18, y: 12.24, z: 3.92}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1673,7 +1673,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: ec546e9522ba46445bec3e0a6df11780, type: 2}
+      objectReference: {fileID: 2100000, guid: ce448f63e503753499e16c0e9b226be2, type: 2}
     - target: {fileID: -4683669308469848369, guid: f3771bdce288a0d4e8a008c9ff6b91cc,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
