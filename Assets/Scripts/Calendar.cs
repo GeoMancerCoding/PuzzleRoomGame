@@ -15,6 +15,7 @@ public class Calendar : MonoBehaviour
     public Transform PaintingT;
     public Interactable SafeInteractable;
 
+    public AudioSource clock;
     void Update()
     {
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -34,6 +35,7 @@ public class Calendar : MonoBehaviour
                     GetComponent<Interactable>().LookAtPointOfInterest(PaintingT, true);
                     SafeInteractable.CanBeInteractedWith = true;
                     SafeInteractable.GetComponent<Animation>().Play("MovePainting");
+                    clock.Play();
                 }
             }
         }
