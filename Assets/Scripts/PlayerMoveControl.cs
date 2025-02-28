@@ -219,11 +219,6 @@ public class PlayerMoveControl : MonoBehaviour
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
         }
-        if (nearbyPickup.PuzzleImage != null)
-        {
-            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Focused");
-            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Focused");
-        }
         FocusCamera.SetActive(true);
         while (!Input.GetKeyDown(KeyCode.E))
         {
@@ -238,11 +233,6 @@ public class PlayerMoveControl : MonoBehaviour
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Default");
-        }
-        if (nearbyPickup.PuzzleImage != null)
-        {
-            nearbyPickup.PuzzleImage.gameObject.layer = LayerMask.NameToLayer("Default");
-            nearbyPickup.PuzzleImage.transform.parent.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         FocusCamera.SetActive(false);
         StartCoroutine(LerpObjectToInventory());
