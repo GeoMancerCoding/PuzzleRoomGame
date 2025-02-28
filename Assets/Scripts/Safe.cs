@@ -16,6 +16,10 @@ public class Safe : MonoBehaviour
     private Collider lastButtonCollider;
     private bool pressingButton = false;
 
+    public AudioSource button;
+    public AudioSource pass;
+    public AudioSource fail;
+
     private void Update()
     {
         if (!pressingButton)
@@ -37,6 +41,7 @@ public class Safe : MonoBehaviour
                 {
                     lastButtonCollider.GetComponent<Renderer>().material = PressedMat;
                     Anim.Play(lastButtonCollider.name);
+                    button.Play();
                     pressingButton = true;
                 }
             }
@@ -72,12 +77,14 @@ public class Safe : MonoBehaviour
     public void OnFinishedIncorrectCode()
     {
         enteredCode = "";
+        fail.Play();
         pressingButton = false;
     }
 
     public void OnFinishedCorrectCode()
     {
         Anim.Play("Open");
+        pass.Play();
         GetComponent<Interactable>().LerpCamToOrigPos(true);
         enabled = false;
         Key.Enable();
