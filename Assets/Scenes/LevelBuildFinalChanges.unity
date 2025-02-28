@@ -12315,7 +12315,7 @@ GameObject:
   - component: {fileID: 700692919}
   - component: {fileID: 700692917}
   - component: {fileID: 700692918}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: March17thQuad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12701,6 +12701,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimerText: {fileID: 628904152}
+  OneSnakePiece: {fileID: 0}
+  TwoSnakePiece: {fileID: 0}
+  HeartPiece: {fileID: 0}
+  Sethascope: {fileID: 0}
 --- !u!1 &712254225
 GameObject:
   m_ObjectHideFlags: 0
@@ -19831,6 +19835,7 @@ MonoBehaviour:
   LerpObjectToInventoryDurationSecs: 1
   FocusCamera: {fileID: 934328989}
   InspectionUICanvas: {fileID: 2087174814}
+  uiScript: {fileID: 0}
   PlayerVO: {fileID: 1812765546}
   walk: {fileID: 840945041}
   cooldownTime: 2
@@ -68355,6 +68360,7 @@ MonoBehaviour:
   targetBeakerThree: 8
   targetBeakerFour: 5
   Stethoscope: {fileID: 1775917000}
+  sethaUi: {fileID: 0}
   currentBeakerOne: 0
   currentBeakerTwo: 0
   currentBeakerThree: 0
@@ -75594,12 +75600,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CalendarTargetLayerMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 4096
   TimeUntilColorStartsToChangeSecs: 3
   ColorChangeDurationSecs: 4
   March17thRenderer: {fileID: 700692917}
   PaintingT: {fileID: 401942050}
   SafeInteractable: {fileID: 1524337287}
+  clock: {fileID: 0}
 --- !u!223 &146329526332356005
 Canvas:
   m_ObjectHideFlags: 0

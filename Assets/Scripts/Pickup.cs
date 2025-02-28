@@ -5,12 +5,12 @@ public class Pickup : MonoBehaviour
 {
     public bool CanBePickedUp = true;
     public bool ToBeInspected = true;
+    public bool CanBePocketed = true;
     public float InspectZDistance = 0.5f;
     public GameObject Indicator;
     public BoxCollider boxCollider;
     private string playerTag = "Player";
     public Renderer[] Renderers;
-    public RawImage PuzzleImage;
 
     private void OnTriggerEnter(Collider collider)
     {

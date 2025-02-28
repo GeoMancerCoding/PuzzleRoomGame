@@ -48,6 +48,9 @@ public class PlayerMoveControl : MonoBehaviour
     public bool CarryingHeartPiece = false;
     public bool CarryingKey = false;
 
+    private Vector3 origPickupPos;
+    private Quaternion origPickupRot;
+
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -153,6 +156,8 @@ public class PlayerMoveControl : MonoBehaviour
     {
         if (nearbyPickup.ToBeInspected == true)
         {
+            origPickupPos = nearbyPickup.transform.position;
+            origPickupRot = nearbyPickup.transform.rotation;
             nearbyPickup.CanBePickedUp = false;
             inspecting = true;
             nearbyPickup.HideIndicator();
@@ -215,7 +220,10 @@ public class PlayerMoveControl : MonoBehaviour
             default:
                 break;
         }
-        InspectionUICanvas.SetActive(true);
+        if (nearbyPickup.gameObject.name != "Clipbored")
+        {
+            InspectionUICanvas.SetActive(true);
+        }   
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Focused");
@@ -230,13 +238,23 @@ public class PlayerMoveControl : MonoBehaviour
                     0) * Time.fixedDeltaTime * InspectionRotationSpeed);
             yield return null;
         }
-        InspectionUICanvas.SetActive(false);
+        if (nearbyPickup.gameObject.name != "Clipbored")
+        {
+            InspectionUICanvas.SetActive(false);
+        }
         foreach (Renderer renderer in nearbyPickup.Renderers)
         {
             renderer.gameObject.layer = LayerMask.NameToLayer("Default");
         }
         FocusCamera.SetActive(false);
-        StartCoroutine(LerpObjectToInventory());
+        if (nearbyPickup.CanBePocketed)
+        {
+            StartCoroutine(LerpObjectToInventory());
+        }
+        else
+        {
+            StartCoroutine(LerpObjectToOrigPos());
+        }
         yield return null;
     }
 
@@ -291,7 +309,34 @@ public class PlayerMoveControl : MonoBehaviour
         inspecting = false;
         yield return null;
     }
-    
+
+    private IEnumerator LerpObjectToOrigPos()
+    {
+        Vector3 origPos = nearbyPickup.transform.position;
+        Quaternion origRot = nearbyPickup.transform.rotation;
+        Quaternion lookRot = CameraT.transform.rotation;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < LerpObjectToInspectPointDurationSecs)
+        {
+            elapsedTime += Time.fixedDeltaTime;
+            nearbyPickup.transform.position = Vector3.Lerp(origPos, origPickupPos, elapsedTime / LerpObjectToInspectPointDurationSecs);
+            nearbyPickup.transform.rotation = Quaternion.Lerp(origRot, origPickupRot, elapsedTime / LerpObjectToInspectPointDurationSecs);
+            CameraT.transform.rotation = Quaternion.Lerp(lookRot, origLookRotBeforeInspection, elapsedTime / LerpObjectToInventoryDurationSecs);
+            yield return null;
+        }
+        CameraT.transform.rotation = origLookRotBeforeInspection;
+        canMove = true;
+        canLookAround = true;
+        canInteract = true;
+        inspecting = false;
+
+        nearbyPickup.Enable();
+        nearbyPickup.transform.position = origPickupPos;
+        nearbyPickup.transform.rotation = origPickupRot;
+        yield return null;
+    }
+
     public void EnableMovement()
     {
         canMove = true;

@@ -3,7 +3,7 @@ using UnityEngine;
 public class ExitDoor : MonoBehaviour
 {
     public Animation Anim;
-    public BoxCollider collider;
+    public BoxCollider doorCollider;
 
     private void OnEnable()
     {
@@ -11,13 +11,13 @@ public class ExitDoor : MonoBehaviour
         if (player.CarryingKey)
         {
             Anim.Play("OpenDoor");
-            collider.enabled = false;
+            doorCollider.enabled = false;
         }
     }
 
     public void OnFinishOpeningDoor()
     {
         GetComponent<Interactable>().LerpCamToOrigPos(true);
-        collider.enabled = true;
+        doorCollider.enabled = true;
     }
 }
