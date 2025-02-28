@@ -23,6 +23,12 @@ public class AlchemyPuzzle : MonoBehaviour
     [SerializeField] float currentBeakerThree;
     [SerializeField] float currentBeakerFour;
 
+    public AudioSource drawer;
+
+    public AudioSource chemical;
+
+    public AudioSource whisper;
+
     private void Start()
     {
         beakerOne.transform.localScale = new Vector3(beakerOne.transform.localScale.x, currentBeakerOne / 10, beakerOne.transform.localScale.z);
@@ -52,6 +58,7 @@ public class AlchemyPuzzle : MonoBehaviour
         {
             Anim.Play("OpenSecretCompartment");
             GetComponent<Interactable>().LerpCamToOrigPos(true);
+            drawer.Play();
             enabled = false;
             drawerHasBeenOpened = true;
         }
@@ -96,5 +103,11 @@ public class AlchemyPuzzle : MonoBehaviour
     public void OnFinishOpeningDrawer()
     {
         Stethoscope.Enable();
+        whisper.Play();
+    }
+
+    public void playSpill()
+    {
+        chemical.Play();
     }
 }
