@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,7 +12,7 @@ public class UIScript : MonoBehaviour
     public GameObject TwoSnakePiece;
     public GameObject HeartPiece;
     public GameObject Sethascope;
-    // Start is called before the first frame update
+
     void Start()
     {
         OneSnakePiece.SetActive(false);
@@ -23,7 +21,6 @@ public class UIScript : MonoBehaviour
         Sethascope.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         remainingTime -= Time.deltaTime;
@@ -33,7 +30,6 @@ public class UIScript : MonoBehaviour
 
         if (remainingTime <= 0)
         {
-            //Application.Quit();
             SceneManager.LoadScene(2);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;

@@ -124,10 +124,6 @@ public class PlayerMoveControl : MonoBehaviour
 
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
         if (canInteract)
         {
             if (Input.GetKeyDown(KeyCode.E) && nearbyInteractable != null && nearbyInteractable.IsVisible(CameraT) && !interacting)
